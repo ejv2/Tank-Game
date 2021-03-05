@@ -1,0 +1,4 @@
+*.o
+*.tar
+tank-game
+.ycm_extra_conf.py

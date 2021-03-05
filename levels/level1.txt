@@ -1,0 +1,5 @@
+# DO NOT EDIT
+# This is a Tank Game level file
+# Editing may make game unplayable
+s 100,250
+w 500,200,0
