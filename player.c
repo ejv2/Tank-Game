@@ -4,9 +4,9 @@
  * Copyright 2021 - Ethan Marshall
  */
 
-#include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include <SDL2/SDL.h>
 
@@ -14,10 +14,8 @@
 
 extern struct SDL_Renderer *renderer;
 
-
-static const char* tankTexture = "res/tank.png";
+static const char *tankTexture = "res/tank.png";
 static const int tankSize = 60;
-
 
 void tankInit(struct Player *player) {
 	player->health = 100;
@@ -27,7 +25,8 @@ void tankInit(struct Player *player) {
 	player->heading = 0.0;
 
 	player->texSurface = loadTexture(tankTexture);
-	player->texture = SDL_CreateTextureFromSurface(renderer, player->texSurface);
+	player->texture =
+		SDL_CreateTextureFromSurface(renderer, player->texSurface);
 }
 
 void tankDestroy(struct Player *player) {
@@ -37,17 +36,14 @@ void tankDestroy(struct Player *player) {
 
 void tankRender(struct Player *player) {
 	struct SDL_Rect place = {
-		player->x, player->y,
-		tankSize, tankSize,
+		player->x,
+		player->y,
+		tankSize,
+		tankSize,
 	};
 
-	SDL_RenderCopyEx(renderer,
-			player->texture,
-			NULL, 
-			&place,
-			player->heading,
-			NULL,
-			SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer, player->texture, NULL, &place, player->heading,
+					 NULL, SDL_FLIP_NONE);
 }
 
 void tankTick(struct Player *player, long milisTime) {

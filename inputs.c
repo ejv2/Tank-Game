@@ -6,15 +6,14 @@
  * Shared function forward definitions
  */
 
-#include <stdint.h>
-#include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 static bool *keys = NULL;
 static int keysRegistered = 0;
 
 static bool mice[] = {false, false, false, false, false};
-
 
 void updateKeys(char key, bool down) {
 	uint8_t keyi = (int8_t)key;
@@ -28,19 +27,18 @@ void updateKeys(char key, bool down) {
 		}
 
 		keys[keyi] = down;
-	}
-	else if (keyi > keysRegistered) {
+	} else if (keyi > keysRegistered) {
 		keys = realloc(keys, sizeof(bool) * keyi);
-
 
 		int prevKeysRegistered = keysRegistered;
 		keysRegistered = keyi;
-		for (int i = prevKeysRegistered; i < (keysRegistered - prevKeysRegistered) + 1; i++) {
+		for (int i = prevKeysRegistered;
+			 i < (keysRegistered - prevKeysRegistered) + 1; i++) {
 			keys[i] = 0x0;
 		}
 
 		keys[keyi] = down;
-	}else{
+	} else {
 		keys[keyi] = down;
 	}
 }
@@ -53,7 +51,7 @@ bool isKeyDown(char key) {
 	int8_t keyi = (int8_t)key;
 	if (keyi > keysRegistered) {
 		return false;
-	}else{
+	} else {
 		return keys[keyi];
 	}
 }

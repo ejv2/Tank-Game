@@ -4,28 +4,25 @@
  * Copyright 2021 - Ethan Marshall
  */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-#include <unistd.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 #include "tank.h"
 
-
-static const uint32_t sdl_systems = SDL_INIT_VIDEO |
-				    SDL_INIT_AUDIO |
-				    SDL_INIT_EVENTS |
-				    SDL_INIT_TIMER;
+static const uint32_t sdl_systems =
+	SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS | SDL_INIT_TIMER;
 static const uint32_t sdl_winflags = 0;
 static const uint32_t sdl_rendflags = SDL_RENDERER_ACCELERATED;
 
-static const char* name = "Tank Game";
+static const char *name = "Tank Game";
 static const int x = SDL_WINDOWPOS_CENTERED;
 static const int y = SDL_WINDOWPOS_CENTERED;
 static const int w = 1280;
@@ -47,7 +44,6 @@ static struct Level level;
 struct SDL_Window *window;
 struct SDL_Renderer *renderer;
 
-
 void printBanner() {
 	puts("Tank Game - A Really Simply SDL Game");
 	puts("By Ethan Marshall - 2021");
@@ -65,19 +61,18 @@ void initSDL(uint32_t systems) {
 		exit(1);
 	}
 
-	window = SDL_CreateWindow(name,
-				  x, y,
-				  w, h,
-				  sdl_winflags);
+	window = SDL_CreateWindow(name, x, y, w, h, sdl_winflags);
 	if (!window) {
-		printf("E: Failed to set up display!\nError message: %s\n", SDL_GetError());
+		printf("E: Failed to set up display!\nError message: %s\n",
+			   SDL_GetError());
 		quitSDL();
 		exit(1);
 	}
 
 	renderer = SDL_CreateRenderer(window, -1, sdl_rendflags);
 	if (!renderer) {
-		printf("E: Failed to set up renderer!\nError message: %s\n", SDL_GetError());
+		printf("E: Failed to set up renderer!\nError message: %s\n",
+			   SDL_GetError());
 		quitSDL();
 		exit(1);
 	}
@@ -91,7 +86,7 @@ void quitSDL() {
 
 void init() {
 	running = true;
-	
+
 	tankInit(&player);
 }
 
@@ -116,34 +111,34 @@ void tick() {
 void handleEvents() {
 	SDL_Event e;
 	while (SDL_PollEvent(&e) > 0) {
-		switch(e.type) {
-			case SDL_QUIT:
-				running = false;
+		switch (e.type) {
+		case SDL_QUIT:
+			running = false;
+			break;
+		case SDL_KEYDOWN:
+			updateKeys(e.key.keysym.sym, true);
+			break;
+		case SDL_KEYUP:
+			updateKeys(e.key.keysym.sym, false);
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			updateMice(e.button.button, true);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			updateMice(e.button.button, false);
+			break;
+		case SDL_WINDOWEVENT:
+			switch (e.window.event) {
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+				focused = true;
 				break;
-			case SDL_KEYDOWN:
-				updateKeys(e.key.keysym.sym, true);
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				focused = false;
 				break;
-			case SDL_KEYUP:
-				updateKeys(e.key.keysym.sym, false);
+			default:
 				break;
-			case SDL_MOUSEBUTTONDOWN:
-				updateMice(e.button.button, true);
-				break;
-			case SDL_MOUSEBUTTONUP:
-				updateMice(e.button.button, false);
-				break;
-			case SDL_WINDOWEVENT:
-				switch(e.window.event) {
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-						focused = true;
-						break;
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-						focused = false;
-						break;
-					default:
-						break;
-				}
-				break;
+			}
+			break;
 		}
 	}
 }

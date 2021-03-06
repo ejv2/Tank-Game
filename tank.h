@@ -9,12 +9,11 @@
 #ifndef TANK_H_INCLUDED
 #define TANK_H_INCLUDED
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #define PARSE_MAX_LINE_LENGTH 50
 #define LVL_MAX_ENTITY_COUNT 1000
-
 
 struct SDL_Renderer;
 struct SDL_Surface;
@@ -33,14 +32,10 @@ void render();
 void tick();
 
 // Util
-struct SDL_Surface* loadTexture(const char* texPath);
+struct SDL_Surface *loadTexture(const char *texPath);
 
 // Level manager
-enum EntityType {
-	wall = 0,
-	enemy = 1,
-	goal = 2
-};
+enum EntityType { wall = 0, enemy = 1, goal = 2 };
 
 struct Entity {
 	enum EntityType type;
@@ -48,7 +43,7 @@ struct Entity {
 	uint8_t health;
 	bool canDamage;
 
-	int x,y;
+	int x, y;
 	uint8_t orientation;
 
 	bool isRemoved;
@@ -59,7 +54,7 @@ struct Entity {
 
 struct Level {
 	int levelIndex;
-	char* levelFile;
+	char *levelFile;
 
 	int startPoint[2];
 
@@ -67,9 +62,10 @@ struct Level {
 	struct Entity *ents[LVL_MAX_ENTITY_COUNT];
 };
 
-void levelInit(struct Level* level, uint32_t levelID);
-void levelDestroy(struct Level* level);
-int addEntity(struct Level* level, enum EntityType type, uint8_t initialHealth, bool canDamage, int x, int y, uint8_t oriantation);
+void levelInit(struct Level *level, uint32_t levelID);
+void levelDestroy(struct Level *level);
+int addEntity(struct Level *level, enum EntityType type, uint8_t initialHealth,
+			  bool canDamage, int x, int y, uint8_t oriantation);
 void removeEntity();
 
 void levelRender(struct Level *level);
@@ -79,7 +75,7 @@ void levelTick(long milisTime);
 struct Player {
 	uint8_t health;
 
-	int x,y;
+	int x, y;
 	double heading;
 
 	struct SDL_Surface *texSurface;
