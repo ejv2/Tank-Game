@@ -113,6 +113,7 @@ void quitSDL() {
 
 void init() {
 	running = true;
+	state = game;
 
 	tankInit(&player);
 }
@@ -120,8 +121,25 @@ void init() {
 void render() {
 	SDL_RenderClear(renderer);
 
-	tankRender(&player);
-	levelRender(&level);
+	switch (state){
+	case fsMenu:
+		break;
+	case olMenu:
+		tankRender(&player);
+		levelRender(&level);
+		break;
+	case game:
+		tankRender(&player);
+		levelRender(&level);
+		break;
+	case failure:
+		break;
+	case success:
+		break;
+	default:
+		puts("BUG: Unknown game state!");
+		exit(1);
+	}
 
 	SDL_RenderPresent(renderer);
 }
@@ -131,8 +149,22 @@ void tick() {
 
 	long now = SDL_GetTicks();
 
-	levelTick(now);
-	tankTick(&player, now);
+	switch (state){
+	case fsMenu:
+		break;
+	case olMenu:
+		break;
+	case game:
+		levelTick(now);
+		tankTick(&player, now);
+	case failure:
+		break;
+	case success:
+		break;
+	default:
+		puts("BUT: Unknown game state!");
+		exit(1);
+	}
 }
 
 void handleEvents() {
