@@ -14,6 +14,7 @@
 
 #define PARSE_MAX_LINE_LENGTH 50
 #define LVL_MAX_ENTITY_COUNT 1000
+#define UI_MAX_HUD_ELEMS 75
 
 struct SDL_Renderer;
 struct SDL_Surface;
@@ -30,6 +31,27 @@ void quitSDL();
 void init();
 void render();
 void tick();
+
+// Game state
+enum GameState {
+	fsMenu = 1, /* Full screen menu */
+	olMenu = 2, /* Overlay menu */
+	game = 3,  /* Playing the main game */
+	failure = 4,/* You failed */
+	success = 5,/* You won */
+};
+
+// Menus
+enum ControlType {
+	label = 1,
+	button = 2,
+	picture = 3,
+};
+
+struct Menu {
+	bool fullScreen;
+	enum ControlType controls[UI_MAX_HUD_ELEMS];
+};
 
 // Util
 struct SDL_Surface *loadTexture(const char *texPath);

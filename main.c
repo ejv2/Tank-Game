@@ -38,6 +38,9 @@ uint32_t frames = 0;
 
 uint64_t tickCount = 0;
 
+enum GameState state = fsMenu;
+struct Menu currentMenu;
+
 static struct Player player;
 static struct Level level;
 

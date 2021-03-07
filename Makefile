@@ -1,4 +1,4 @@
-sources=main.c level.c player.c util.c inputs.c
+sources=main.c level.c player.c util.c inputs.c menu.c
 objects=${sources:.c=.o}
 headers=tank.h
 
