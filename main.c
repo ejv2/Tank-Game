@@ -4,6 +4,7 @@
  * Copyright 2021 - Ethan Marshall
  */
 
+#include <SDL2/SDL_render.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -14,6 +15,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "tank.h"
 
@@ -37,7 +39,6 @@ uint32_t ticks = 0;
 uint32_t frames = 0;
 
 uint64_t tickCount = 0;
-
 enum GameState state = fsMenu;
 struct Menu currentMenu;
 
@@ -46,6 +47,9 @@ static struct Level level;
 
 struct SDL_Window *window;
 struct SDL_Renderer *renderer;
+
+static const char* programFontPath = "res/joystix.ttf";
+TTF_Font *programFont[3];
 
 void printBanner() {
 	puts("Tank Game - A Really Simply SDL Game");
@@ -61,6 +65,20 @@ void printHelp() {
 void initSDL(uint32_t systems) {
 	if (SDL_Init(systems)) {
 		printf("E: Failed to setup SDL!\nError message: %s\n", SDL_GetError());
+		exit(1);
+	}
+
+	if (TTF_Init()==-1) {
+		printf("E: Failed to initialise font loading engine!\nError message: %s\n", TTF_GetError());
+		exit(1);
+	}
+
+	programFont[0] = TTF_OpenFont(programFontPath, 16);
+	programFont[1] = TTF_OpenFont(programFontPath, 32);
+	programFont[2] = TTF_OpenFont(programFontPath, 72);
+
+	if (programFont[0] == NULL || programFont[1] == NULL || programFont[2] == NULL) {
+		printf("E: Failed to load required game fonts! Check your game install\nError message: %s\n", TTF_GetError());
 		exit(1);
 	}
 
@@ -84,6 +102,12 @@ void initSDL(uint32_t systems) {
 void quitSDL() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+
+	TTF_CloseFont(programFont[0]);
+	TTF_CloseFont(programFont[1]);
+	TTF_CloseFont(programFont[2]);
+	TTF_Quit();
+
 	SDL_Quit();
 }
 
