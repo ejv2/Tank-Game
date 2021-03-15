@@ -7,6 +7,8 @@
  */
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -17,7 +19,8 @@ extern enum GameState state;
 extern struct SDL_Renderer *renderer;
 extern TTF_Font *programFont;
 
-static const char *buttonBackgroundTexture = "res/btn.png";
+static const char *buttonBackgroundTexture = "res/ui/btn.png";
+static const char *buttonFocusBackgroundTexture = "res/ui/fbtn.png";
 
 void menuInit(struct Menu *menu) {
 	menu->labelCount = 0;
@@ -113,13 +116,82 @@ void labelRender(struct Label *label) {
 void labelTick(struct Label *label) {
 }
 
-void buttonInit(struct Button *button, char *text, struct SDL_Color textCol) {
+void buttonInit(struct Button *button, char *text,
+				struct SDL_Color focusTextCol, struct SDL_Color unfocusTextCol,
+				int x, int y, int w, int h) {
+	SDL_Surface *tuSurf =
+		TTF_RenderText_Solid(programFont, text, unfocusTextCol);
+	SDL_Surface *tfSurf = TTF_RenderText_Solid(programFont, text, focusTextCol);
+
+	SDL_Surface *ubgSurf = loadTexture(buttonBackgroundTexture);
+	SDL_Surface *fbgSurf = loadTexture(buttonFocusBackgroundTexture);
+
+	button->focusBackTex = SDL_CreateTextureFromSurface(renderer, fbgSurf);
+	button->focusTextTex = SDL_CreateTextureFromSurface(renderer, tfSurf);
+	button->unfocusBackTex = SDL_CreateTextureFromSurface(renderer, ubgSurf);
+	button->unfocusTextTex = SDL_CreateTextureFromSurface(renderer, tuSurf);
+
+	SDL_FreeSurface(tuSurf);
+	SDL_FreeSurface(tfSurf);
+	SDL_FreeSurface(ubgSurf);
+	SDL_FreeSurface(fbgSurf);
+
+	button->place.x = x;
+	button->place.y = y;
+	button->place.w = w;
+	button->place.h = h;
+
+	button->focused = false;
+
+	button->wasFocused = false;
+	button->wasClicked = false;
+
+	button->onClick = NULL;
+	button->onFocus = NULL;
 }
 
 void buttonDestroy(struct Button *button) {
+	SDL_DestroyTexture(button->focusBackTex);
+	SDL_DestroyTexture(button->focusTextTex);
+
+	SDL_DestroyTexture(button->unfocusBackTex);
+	SDL_DestroyTexture(button->unfocusTextTex);
 }
 
 void buttonRender(struct Button *button) {
+	SDL_Point mouseP;
+	uint32_t but = SDL_GetMouseState(&mouseP.x, &mouseP.y);
+
+	button->focused = SDL_PointInRect(&mouseP, &button->place);
+
+	SDL_Texture *backTexture;
+	SDL_Texture *textTexture;
+	if (button->focused) {
+		backTexture = button->focusBackTex;
+		textTexture = button->focusTextTex;
+
+		/* Call frame-perfect hooks */
+		if (!button->wasFocused && button->onFocus) {
+			button->wasFocused = true;
+			button->onFocus();
+		}
+
+		if (but & SDL_BUTTON(SDL_BUTTON_LEFT) && button->onClick) {
+			if (!button->wasClicked)
+				button->onClick();
+			button->wasClicked = true;
+		} else {
+			button->wasClicked = false;
+		}
+	} else {
+		button->wasFocused = false;
+
+		backTexture = button->unfocusBackTex;
+		textTexture = button->unfocusTextTex;
+	}
+
+	SDL_RenderCopy(renderer, backTexture, NULL, &button->place);
+	SDL_RenderCopy(renderer, textTexture, NULL, &button->place);
 }
 
 void buttonTick(struct Button *button) {

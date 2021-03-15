@@ -50,10 +50,23 @@ struct Label {
 };
 
 struct Button {
-	SDL_Rect location;
+	bool focused;
+
+	bool wasFocused;
+	bool wasClicked;
+
+	struct SDL_Rect place;
 
 	char *text;
-	struct SDL_Color color;
+
+	struct SDL_Texture *focusTextTex;
+	struct SDL_Texture *focusBackTex;
+
+	struct SDL_Texture *unfocusTextTex;
+	struct SDL_Texture *unfocusBackTex;
+
+	void (*onFocus)();
+	void (*onClick)();
 };
 
 struct Image {
@@ -90,7 +103,9 @@ void labelDestroy(struct Label *label);
 void labelRender(struct Label *label);
 void labelTick(struct Label *label);
 
-void buttonInit(struct Button *button, char *text, struct SDL_Color textCol);
+void buttonInit(struct Button *button, char *text,
+				struct SDL_Color focusTextCol, struct SDL_Color unfocusTextCol,
+				int x, int y, int w, int h);
 void buttonDestroy(struct Button *button);
 void buttonRender(struct Button *button);
 void buttonTick(struct Button *button);

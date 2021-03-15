@@ -221,16 +221,21 @@ int main(int argc, char **argv) {
 	player.y = level.startPoint[1];
 
 	struct Menu menu;
-	struct Label label;
 
-	struct SDL_Color fg = {255, 0, 0};
-	struct SDL_Color bg = {0, 0, 255};
+	struct Label label;
+	struct Button button;
+
+	struct SDL_Color fg = {0, 0, 255};
+	struct SDL_Color bg = {255, 0, 0};
 
 	menuInit(&menu);
 	currentMenu = &menu;
 
 	labelInit(&label, "Test label", fg, bg, 100, 100, 300, 75);
 	menuAddLabel(&menu, &label);
+
+	buttonInit(&button, "Test button", bg, fg, 100, 200, 300, 100);
+	menuAddButton(&menu, &button);
 
 	while (running) {
 		long now = SDL_GetPerformanceCounter();
