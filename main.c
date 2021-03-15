@@ -4,7 +4,6 @@
  * Copyright 2021 - Ethan Marshall
  */
 
-#include <SDL2/SDL_render.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -40,7 +39,7 @@ uint32_t frames = 0;
 
 uint64_t tickCount = 0;
 enum GameState state = fsMenu;
-struct Menu currentMenu;
+struct Menu *currentMenu;
 
 static struct Player player;
 static struct Level level;
@@ -48,8 +47,8 @@ static struct Level level;
 struct SDL_Window *window;
 struct SDL_Renderer *renderer;
 
-static const char* programFontPath = "res/joystix.ttf";
-TTF_Font *programFont[3];
+static const char *programFontPath = "res/joystix.ttf";
+TTF_Font *programFont;
 
 void printBanner() {
 	puts("Tank Game - A Really Simply SDL Game");
@@ -68,17 +67,19 @@ void initSDL(uint32_t systems) {
 		exit(1);
 	}
 
-	if (TTF_Init()==-1) {
-		printf("E: Failed to initialise font loading engine!\nError message: %s\n", TTF_GetError());
+	if (TTF_Init() == -1) {
+		printf(
+			"E: Failed to initialise font loading engine!\nError message: %s\n",
+			TTF_GetError());
 		exit(1);
 	}
 
-	programFont[0] = TTF_OpenFont(programFontPath, 16);
-	programFont[1] = TTF_OpenFont(programFontPath, 32);
-	programFont[2] = TTF_OpenFont(programFontPath, 72);
+	programFont = TTF_OpenFont(programFontPath, 72);
 
-	if (programFont[0] == NULL || programFont[1] == NULL || programFont[2] == NULL) {
-		printf("E: Failed to load required game fonts! Check your game install\nError message: %s\n", TTF_GetError());
+	if (!programFont) {
+		printf("E: Failed to load required game fonts! Check your game "
+			   "install\nError message: %s\n",
+			   TTF_GetError());
 		exit(1);
 	}
 
@@ -103,9 +104,7 @@ void quitSDL() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 
-	TTF_CloseFont(programFont[0]);
-	TTF_CloseFont(programFont[1]);
-	TTF_CloseFont(programFont[2]);
+	TTF_CloseFont(programFont);
 	TTF_Quit();
 
 	SDL_Quit();
@@ -113,7 +112,7 @@ void quitSDL() {
 
 void init() {
 	running = true;
-	state = game;
+	state = fsMenu;
 
 	tankInit(&player);
 }
@@ -121,10 +120,13 @@ void init() {
 void render() {
 	SDL_RenderClear(renderer);
 
-	switch (state){
+	switch (state) {
 	case fsMenu:
+		menuRender(currentMenu);
 		break;
 	case olMenu:
+		menuRender(currentMenu);
+
 		tankRender(&player);
 		levelRender(&level);
 		break;
@@ -149,7 +151,7 @@ void tick() {
 
 	long now = SDL_GetTicks();
 
-	switch (state){
+	switch (state) {
 	case fsMenu:
 		break;
 	case olMenu:
@@ -162,7 +164,7 @@ void tick() {
 	case success:
 		break;
 	default:
-		puts("BUT: Unknown game state!");
+		puts("BUG: Unknown game state!");
 		exit(1);
 	}
 }
@@ -217,6 +219,18 @@ int main(int argc, char **argv) {
 	levelInit(&level, curLevel);
 	player.x = level.startPoint[0];
 	player.y = level.startPoint[1];
+
+	struct Menu menu;
+	struct Label label;
+
+	struct SDL_Color fg = {255, 0, 0};
+	struct SDL_Color bg = {0, 0, 255};
+
+	menuInit(&menu);
+	currentMenu = &menu;
+
+	labelInit(&label, "Test label", fg, bg, 100, 100, 300, 75);
+	menuAddLabel(&menu, &label);
 
 	while (running) {
 		long now = SDL_GetPerformanceCounter();

@@ -12,14 +12,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_render.h>
+
 #define PARSE_MAX_LINE_LENGTH 50
 #define LVL_MAX_ENTITY_COUNT 1000
 #define UI_MAX_HUD_ELEMS 75
-
-struct SDL_Renderer;
-struct SDL_Surface;
-struct SDL_Texture;
-struct FILE;
 
 // General
 void printBanner();
@@ -34,24 +32,73 @@ void tick();
 
 // Game state
 enum GameState {
-	fsMenu = 1, /* Full screen menu */
-	olMenu = 2, /* Overlay menu */
-	game = 3,  /* Playing the main game */
-	failure = 4,/* You failed */
-	success = 5,/* You won */
+	fsMenu = 1,	 /* Full screen menu */
+	olMenu = 2,	 /* Overlay menu */
+	game = 3,	 /* Playing the main game */
+	failure = 4, /* You failed */
+	success = 5, /* You won */
 };
 
 // Menus
-enum ControlType {
-	label = 1,
-	button = 2,
-	picture = 3,
+struct Label {
+	SDL_Rect location;
+
+	char *text;
+	struct SDL_Color color[2];
+
+	struct SDL_Texture *texture;
+};
+
+struct Button {
+	SDL_Rect location;
+
+	char *text;
+	struct SDL_Color color;
+};
+
+struct Image {
+	SDL_Rect location;
+
+	struct SDL_Texture *imageTexture;
 };
 
 struct Menu {
 	bool fullScreen;
-	enum ControlType controls[UI_MAX_HUD_ELEMS];
+
+	uint8_t labelCount;
+	struct Label *labels[UI_MAX_HUD_ELEMS];
+
+	uint8_t buttonCount;
+	struct Button *buttons[UI_MAX_HUD_ELEMS];
+
+	uint8_t imageCount;
+	struct Image *images[UI_MAX_HUD_ELEMS];
 };
+
+void menuInit(struct Menu *menu);
+void menuDestroy(struct Menu *menu);
+void menuRender(struct Menu *menu);
+void menuTick(struct Menu *menu);
+
+void menuAddLabel(struct Menu *menu, struct Label *label);
+void menuAddButton(struct Menu *menu, struct Button *button);
+void menuAddImage(struct Menu *menu, struct Image *image);
+
+void labelInit(struct Label *label, char *text, struct SDL_Color fg,
+			   struct SDL_Color bg, int x, int y, int w, int h);
+void labelDestroy(struct Label *label);
+void labelRender(struct Label *label);
+void labelTick(struct Label *label);
+
+void buttonInit(struct Button *button, char *text, struct SDL_Color textCol);
+void buttonDestroy(struct Button *button);
+void buttonRender(struct Button *button);
+void buttonTick(struct Button *button);
+
+void imageInit(struct Image *image, char *texturePath);
+void imageDestroy(struct Image *image);
+void imageRender(struct Image *image);
+void imageTick(struct Image *image);
 
 // Util
 struct SDL_Surface *loadTexture(const char *texPath);
