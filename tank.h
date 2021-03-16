@@ -71,6 +71,7 @@ struct Button {
 
 struct Image {
 	SDL_Rect location;
+	float rotation;
 
 	struct SDL_Texture *imageTexture;
 };
@@ -110,7 +111,8 @@ void buttonDestroy(struct Button *button);
 void buttonRender(struct Button *button);
 void buttonTick(struct Button *button);
 
-void imageInit(struct Image *image, char *texturePath);
+void imageInit(struct Image *image, char *texturePath, int x, int y, int w,
+			   int h, float rot);
 void imageDestroy(struct Image *image);
 void imageRender(struct Image *image);
 void imageTick(struct Image *image);

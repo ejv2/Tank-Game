@@ -55,7 +55,7 @@ void menuRender(struct Menu *menu) {
 	}
 
 	for (int k = 0; k < menu->imageCount; k++) {
-		imageDestroy(menu->images[k]);
+		imageRender(menu->images[k]);
 	}
 }
 
@@ -197,14 +197,28 @@ void buttonRender(struct Button *button) {
 void buttonTick(struct Button *button) {
 }
 
-void imageInit(struct Image *image, char *texturePath) {
+void imageInit(struct Image *image, char *texturePath, int x, int y, int w,
+			   int h, float rot) {
+	SDL_Surface *texSurf = loadTexture(texturePath);
+	image->imageTexture = SDL_CreateTextureFromSurface(renderer, texSurf);
+	SDL_FreeSurface(texSurf);
+
+	image->location.x = x;
+	image->location.y = y;
+	image->location.w = w;
+	image->location.h = h;
+	image->rotation = rot;
 }
 
 void imageDestroy(struct Image *image) {
+	SDL_DestroyTexture(image->imageTexture);
 }
 
 void imageRender(struct Image *image) {
+	SDL_RenderCopyEx(renderer, image->imageTexture, NULL, &image->location,
+					 image->rotation, NULL, SDL_FLIP_NONE);
 }
 
 void imageTick(struct Image *image) {
+	image->rotation += 10;
 }

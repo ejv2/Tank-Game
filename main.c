@@ -224,6 +224,7 @@ int main(int argc, char **argv) {
 
 	struct Label label;
 	struct Button button;
+	struct Image image;
 
 	struct SDL_Color fg = {0, 0, 255};
 	struct SDL_Color bg = {255, 0, 0};
@@ -236,6 +237,9 @@ int main(int argc, char **argv) {
 
 	buttonInit(&button, "Test button", bg, fg, 100, 200, 300, 100);
 	menuAddButton(&menu, &button);
+
+	imageInit(&image, "res/tank.png", 100, 300, 200, 200, 0);
+	menuAddImage(&menu, &image);
 
 	while (running) {
 		long now = SDL_GetPerformanceCounter();
