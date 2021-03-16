@@ -43,6 +43,17 @@ void menuDestroy(struct Menu *menu) {
 }
 
 void menuTick(struct Menu *menu) {
+	for (int i = 0; i < menu->labelCount; i++) {
+		labelTick(menu->labels[i]);
+	}
+
+	for (int j = 0; j < menu->buttonCount; j++) {
+		buttonTick(menu->buttons[j]);
+	}
+
+	for (int k = 0; k < menu->imageCount; k++) {
+		imageTick(menu->images[k]);
+	}
 }
 
 void menuRender(struct Menu *menu) {
@@ -220,5 +231,4 @@ void imageRender(struct Image *image) {
 }
 
 void imageTick(struct Image *image) {
-	image->rotation += 10;
 }

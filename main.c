@@ -153,8 +153,12 @@ void tick() {
 
 	switch (state) {
 	case fsMenu:
+		menuTick(currentMenu);
 		break;
 	case olMenu:
+		menuTick(currentMenu);
+		levelTick(now);
+		tankTick(&player, now);
 		break;
 	case game:
 		levelTick(now);
