@@ -114,6 +114,9 @@ void labelInit(struct Label *label, char *text, struct SDL_Color fg,
 	label->text = text;
 	label->color[0] = fg;
 	label->color[1] = bg;
+
+	label->onFrame = NULL;
+	label->onTick = NULL;
 }
 
 void labelDestroy(struct Label *label) {
@@ -121,10 +124,15 @@ void labelDestroy(struct Label *label) {
 }
 
 void labelRender(struct Label *label) {
+	if (label->onFrame)
+		label->onFrame(label);
+
 	SDL_RenderCopy(renderer, label->texture, NULL, &label->location);
 }
 
 void labelTick(struct Label *label) {
+	if (label->onTick)
+		label->onTick(label);
 }
 
 void buttonInit(struct Button *button, char *text,
@@ -157,6 +165,8 @@ void buttonInit(struct Button *button, char *text,
 	button->wasFocused = false;
 	button->wasClicked = false;
 
+	button->onFrame = NULL;
+	button->onTick = NULL;
 	button->onClick = NULL;
 	button->onFocus = NULL;
 }
@@ -201,11 +211,16 @@ void buttonRender(struct Button *button) {
 		textTexture = button->unfocusTextTex;
 	}
 
+	if (button->onFrame)
+		button->onFrame(button);
+
 	SDL_RenderCopy(renderer, backTexture, NULL, &button->place);
 	SDL_RenderCopy(renderer, textTexture, NULL, &button->place);
 }
 
 void buttonTick(struct Button *button) {
+	if (button->onTick)
+		button->onTick(button);
 }
 
 void imageInit(struct Image *image, char *texturePath, int x, int y, int w,
@@ -219,6 +234,9 @@ void imageInit(struct Image *image, char *texturePath, int x, int y, int w,
 	image->location.w = w;
 	image->location.h = h;
 	image->rotation = rot;
+
+	image->onFrame = NULL;
+	image->onTick = NULL;
 }
 
 void imageDestroy(struct Image *image) {
@@ -226,9 +244,14 @@ void imageDestroy(struct Image *image) {
 }
 
 void imageRender(struct Image *image) {
+	if (image->onFrame)
+		image->onFrame(image);
+
 	SDL_RenderCopyEx(renderer, image->imageTexture, NULL, &image->location,
 					 image->rotation, NULL, SDL_FLIP_NONE);
 }
 
 void imageTick(struct Image *image) {
+	if (image->onTick)
+		image->onTick(image);
 }

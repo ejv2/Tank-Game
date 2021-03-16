@@ -47,6 +47,9 @@ struct Label {
 	struct SDL_Color color[2];
 
 	struct SDL_Texture *texture;
+
+	void (*onFrame)(struct Label *target);
+	void (*onTick)(struct Label *target);
 };
 
 struct Button {
@@ -67,6 +70,8 @@ struct Button {
 
 	void (*onFocus)();
 	void (*onClick)();
+	void (*onFrame)(struct Button *target);
+	void (*onTick)(struct Button *target);
 };
 
 struct Image {
@@ -74,6 +79,9 @@ struct Image {
 	float rotation;
 
 	struct SDL_Texture *imageTexture;
+
+	void (*onFrame)(struct Image *target);
+	void (*onTick)(struct Image *target);
 };
 
 struct Menu {
