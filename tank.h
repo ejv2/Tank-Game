@@ -19,7 +19,7 @@
 #define LVL_MAX_ENTITY_COUNT 1000
 #define UI_MAX_HUD_ELEMS 75
 
-// General
+/* General */
 void printBanner();
 void printHelp();
 
@@ -30,7 +30,7 @@ void init();
 void render();
 void tick();
 
-// Game state
+/* Game state */
 enum GameState {
 	fsMenu = 1,	 /* Full screen menu */
 	olMenu = 2,	 /* Overlay menu */
@@ -39,7 +39,7 @@ enum GameState {
 	success = 5, /* You won */
 };
 
-// Menus
+/* Menus */
 struct Label {
 	SDL_Rect location;
 
@@ -125,10 +125,10 @@ void imageDestroy(struct Image *image);
 void imageRender(struct Image *image);
 void imageTick(struct Image *image);
 
-// Util
+/* Util */
 struct SDL_Surface *loadTexture(const char *texPath);
 
-// Level manager
+/* Level manager */
 enum EntityType { wall = 0, enemy = 1, goal = 2 };
 
 struct Entity {
@@ -165,7 +165,7 @@ void removeEntity();
 void levelRender(struct Level *level);
 void levelTick(long milisTime);
 
-// Tank/player manager
+/* Tank/player manager */
 struct Player {
 	uint8_t health;
 
@@ -182,7 +182,7 @@ void tankDestroy(struct Player *player);
 void tankRender(struct Player *player);
 void tankTick(struct Player *player, long milisTime);
 
-// Input handler
+/* Input handler */
 void updateKeys(char key, bool down);
 void updateMice(uint8_t button, bool pressed);
 bool isKeyDown(char key);
