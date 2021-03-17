@@ -1,4 +1,4 @@
-sources=mm.c
+sources=mm.c test.c
 objects=${sources:.c=.o}
 headers=ui.h
 

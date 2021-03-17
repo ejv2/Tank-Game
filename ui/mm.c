@@ -5,3 +5,16 @@
  *
  * Main menu UI definitions
  */
+
+#include "../tank.h"
+#include "ui.h"
+
+extern struct Menu *currentMenu;
+
+static struct Menu mm;
+
+void createMainMenu() {
+	menuInit(&mm);
+
+	currentMenu = &mm;
+}

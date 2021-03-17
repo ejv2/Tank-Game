@@ -4,6 +4,7 @@
  * Copyright 2021 - Ethan Marshall
  */
 
+#include <SDL2/SDL_mutex.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -113,7 +114,9 @@ void quitSDL() {
 
 void init() {
 	running = true;
+
 	state = fsMenu;
+	createTestMenu();
 
 	tankInit(&player);
 }
@@ -224,27 +227,6 @@ int main(int argc, char **argv) {
 	levelInit(&level, curLevel);
 	player.x = level.startPoint[0];
 	player.y = level.startPoint[1];
-
-	struct Menu menu;
-
-	struct Label label;
-	struct Button button;
-	struct Image image;
-
-	struct SDL_Color fg = {0, 0, 255};
-	struct SDL_Color bg = {255, 0, 0};
-
-	menuInit(&menu);
-	currentMenu = &menu;
-
-	labelInit(&label, "Test label", fg, bg, 100, 100, 300, 75);
-	menuAddLabel(&menu, &label);
-
-	buttonInit(&button, "Test button", bg, fg, 100, 200, 300, 100);
-	menuAddButton(&menu, &button);
-
-	imageInit(&image, "res/tank.png", 100, 300, 200, 200, 0);
-	menuAddImage(&menu, &image);
 
 	while (running) {
 		long now = SDL_GetPerformanceCounter();
