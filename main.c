@@ -17,6 +17,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "tank.h"
+#include "ui/ui.h"
 
 static const uint32_t sdl_systems =
 	SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS | SDL_INIT_TIMER;
