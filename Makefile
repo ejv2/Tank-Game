@@ -6,8 +6,8 @@ headers=tank.h
 exec=tank-game
 sdlflags=`sdl2-config --cflags --libs`
 
-LDFLAGS += -lSDL2_image -lSDL2_ttf -lm
-CFLAGS += -std=c99 -Wall -Wpedantic
+export LDFLAGS += -lSDL2_image -lSDL2_ttf -lm
+export CFLAGS += -std=c99 -Wall -Wpedantic
 
 VERSION=0.0.1
 

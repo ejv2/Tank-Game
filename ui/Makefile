@@ -4,10 +4,6 @@ headers=ui.h
 
 mainObj=ui.o
 
-ifeq ($(DEBUG), 1)
-	CFLAGS += -g
-endif
-
 ${mainObj}: ${objects}
 	${LD} -r ${objects} -o ${mainObj}
 
