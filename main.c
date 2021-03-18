@@ -4,7 +4,6 @@
  * Copyright 2021 - Ethan Marshall
  */
 
-#include <SDL2/SDL_mutex.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
