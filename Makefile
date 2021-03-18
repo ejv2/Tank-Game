@@ -7,7 +7,7 @@ exec=tank-game
 sdlflags=`sdl2-config --cflags --libs`
 
 export LDFLAGS += -lSDL2_image -lSDL2_ttf -lm
-export CFLAGS += -std=c99 -Wall -Wpedantic
+export CFLAGS += -std=c99 -O2 -Wall -Wpedantic
 
 VERSION=0.0.1
 
