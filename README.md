@@ -30,7 +30,3 @@ Please see the advice on the requirement for libsdl2 to be installed
 ### SDL2/SDL.h no such file or directory?
 
 Please see the advice on the requirement for the development headers for libsdl2
-
-### Abort? Corrupted heap? Invalid last size? Double free?
-
-Please ignore these errors. They, generally, only appear on the program's exit and are caused by some problem in SDL that hasn't yet been found. It is caused by a problem when freeing the SDL texture surfaces.
