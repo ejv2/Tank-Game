@@ -21,21 +21,31 @@ void updateKeys(char key, bool down) {
 	if (keys == NULL) {
 		keys = malloc(sizeof(bool) * keyi);
 
-		keysRegistered = (int)key;
-		for (int i = 0; i < keysRegistered + 1; i++) {
-			keys[i] = 0x0;
-		}
+		keysRegistered = keyi;
+		memset(keys, 0x0, keysRegistered);
 
 		keys[keyi] = down;
 	} else if (keyi > keysRegistered) {
 		keys = realloc(keys, sizeof(bool) * keyi);
-
-		int prevKeysRegistered = keysRegistered;
 		keysRegistered = keyi;
-		for (int i = prevKeysRegistered;
-			 i < (keysRegistered - prevKeysRegistered) + 1; i++) {
-			keys[i] = 0x0;
-		}
+
+		/* ALERT: Hacky code warning!
+		 *
+		 * TODO: Find out a better way to do this (that doesn't crash the
+		 * program)
+		 *
+		 * We are zeroing the entire keymap dictionary here!
+		 * This will release all keys that the user is currently pressing,
+		 * causing a possible visual delay/desync.
+		 *
+		 * The way I was doing this was to zero out the newly allocated keys,
+		 * but it appears that was causing segfaults and random aborts from
+		 * GLib.
+		 *
+		 * For now, I am going to stick to just re-initialising the whole
+		 * dictionary.
+		 * */
+		memset(keys, 0x0, keysRegistered);
 
 		keys[keyi] = down;
 	} else {
