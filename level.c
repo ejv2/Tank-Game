@@ -26,7 +26,7 @@ static int ent_sizes[][2] = {
 	{64, 64},
 };
 
-void levelInit(struct Level *level, uint32_t levelID) {
+void levelInit(struct Level *level, struct Player *player, uint32_t levelID) {
 	level->levelIndex = levelID;
 
 	level->entityCount = 0;
@@ -44,6 +44,9 @@ void levelInit(struct Level *level, uint32_t levelID) {
 	}
 
 	fclose(lef);
+
+	player->x = level->startPoint[0];
+	player->y = level->startPoint[1];
 }
 
 void levelDestroy(struct Level *level) {

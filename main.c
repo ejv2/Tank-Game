@@ -24,7 +24,7 @@ static const uint32_t sdl_systems =
 static const uint32_t sdl_winflags = 0;
 static const uint32_t sdl_rendflags = SDL_RENDERER_ACCELERATED;
 
-static const char *name = "Tank Game";
+const char *name = "Tank Game";
 static const int x = SDL_WINDOWPOS_CENTERED;
 static const int y = SDL_WINDOWPOS_CENTERED;
 static const int w = 1280;
@@ -42,6 +42,7 @@ uint64_t tickCount = 0;
 enum GameState state = fsMenu;
 struct Menu *currentMenu;
 
+int currentLevel = 1;
 static struct Player player;
 static struct Level level;
 
@@ -111,13 +112,19 @@ void quitSDL() {
 	SDL_Quit();
 }
 
+void startGame() {
+	state = game;
+	currentMenu = NULL;
+
+	tankInit(&player);
+	levelInit(&level, &player, currentLevel);
+}
+
 void init() {
 	running = true;
 
 	state = fsMenu;
-	createTestMenu();
-
-	tankInit(&player);
+	createMainMenu();
 }
 
 void render() {
@@ -221,11 +228,6 @@ int main(int argc, char **argv) {
 	double tickInterval = (double)SDL_GetPerformanceFrequency() / maxtps;
 
 	init();
-
-	int curLevel = 1;
-	levelInit(&level, curLevel);
-	player.x = level.startPoint[0];
-	player.y = level.startPoint[1];
 
 	while (running) {
 		long now = SDL_GetPerformanceCounter();

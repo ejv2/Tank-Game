@@ -27,6 +27,8 @@ void initSDL(uint32_t systems);
 void quitSDL();
 
 void init();
+void startGame();
+
 void render();
 void tick();
 
@@ -128,6 +130,23 @@ void imageTick(struct Image *image);
 /* Util */
 struct SDL_Surface *loadTexture(const char *texPath);
 
+/* Tank/player manager */
+struct Player {
+	uint8_t health;
+
+	int x, y;
+	double heading;
+
+	struct SDL_Surface *texSurface;
+	struct SDL_Texture *texture;
+};
+
+void tankInit(struct Player *player);
+void tankDestroy(struct Player *player);
+
+void tankRender(struct Player *player);
+void tankTick(struct Player *player, long milisTime);
+
 /* Level manager */
 enum EntityType { wall = 0, enemy = 1, goal = 2 };
 
@@ -156,7 +175,7 @@ struct Level {
 	struct Entity *ents[LVL_MAX_ENTITY_COUNT];
 };
 
-void levelInit(struct Level *level, uint32_t levelID);
+void levelInit(struct Level *level, struct Player *player, uint32_t levelID);
 void levelDestroy(struct Level *level);
 int addEntity(struct Level *level, enum EntityType type, uint8_t initialHealth,
 			  bool canDamage, int x, int y, uint8_t oriantation);
@@ -164,23 +183,6 @@ void removeEntity();
 
 void levelRender(struct Level *level);
 void levelTick(long milisTime);
-
-/* Tank/player manager */
-struct Player {
-	uint8_t health;
-
-	int x, y;
-	double heading;
-
-	struct SDL_Surface *texSurface;
-	struct SDL_Texture *texture;
-};
-
-void tankInit(struct Player *player);
-void tankDestroy(struct Player *player);
-
-void tankRender(struct Player *player);
-void tankTick(struct Player *player, long milisTime);
 
 /* Input handler */
 void updateKeys(char key, bool down);
