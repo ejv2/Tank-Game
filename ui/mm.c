@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include <SDL2/SDL_pixels.h>
+
 #include "../tank.h"
 #include "ui.h"
 
