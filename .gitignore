@@ -5,4 +5,5 @@ compile_commands.json
 .gdb_history
 
 .todo/*
+.cache/*
 private/*
