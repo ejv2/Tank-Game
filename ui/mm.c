@@ -89,11 +89,11 @@ void createMainMenu() {
 	labelInit(&title, name, titleColors[0], titleColors[1], 480, 50, 300, 75);
 	menuAddLabel(&mm, &title);
 
-	imageInit(&logoBackdrop, "res/ui/mm/circle.png", 450, 180, 0, 0, 0);
+	imageInit(&logoBackdrop, "res/ui/mm/circle.png", 480, 180, 0, 0, 0);
 	logoBackdrop.onTick = &runIntroAnimationCircle;
 	menuAddImage(&mm, &logoBackdrop);
 
-	imageInit(&logo, "res/tank.png", 460, 200, 0, 0, 0);
+	imageInit(&logo, "res/tank.png", 520, 220, 0, 0, 0);
 	logo.onTick = &runIntroAnimationImage;
 	menuAddImage(&mm, &logo);
 
