@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -26,4 +27,12 @@ struct SDL_Surface *loadTexture(const char *texPath) {
 	}
 
 	return image;
+}
+
+void initRandom() {
+	srand(time(NULL));
+}
+
+int randint(int min, int max) {
+	return (rand() + min) % max;
 }

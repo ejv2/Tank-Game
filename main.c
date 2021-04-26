@@ -121,6 +121,8 @@ void startGame() {
 }
 
 void init() {
+	initRandom();
+
 	running = true;
 
 	state = fsMenu;

@@ -152,6 +152,8 @@ void partialImageTick(struct PartialImage *image);
 
 /* Util */
 struct SDL_Surface *loadTexture(const char *texPath);
+void initRandom();
+int randint(int min, int max);
 
 /* Tank/player manager */
 struct Player {
