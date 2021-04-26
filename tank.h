@@ -86,6 +86,18 @@ struct Image {
 	void (*onTick)(struct Image *target);
 };
 
+struct PartialImage {
+	SDL_Rect location;
+	SDL_Rect imagePortion;
+
+	float rotation;
+
+	struct SDL_Texture *imageTexture;
+
+	void (*onFrame)(struct PartialImage *target);
+	void (*onTick)(struct PartialImage *target);
+};
+
 struct Menu {
 	bool fullScreen;
 
@@ -97,6 +109,9 @@ struct Menu {
 
 	uint8_t imageCount;
 	struct Image *images[UI_MAX_HUD_ELEMS];
+
+	uint8_t partialImageCount;
+	struct PartialImage *partialImages[UI_MAX_HUD_ELEMS];
 };
 
 void menuInit(struct Menu *menu);
@@ -107,6 +122,7 @@ void menuTick(struct Menu *menu);
 void menuAddLabel(struct Menu *menu, struct Label *label);
 void menuAddButton(struct Menu *menu, struct Button *button);
 void menuAddImage(struct Menu *menu, struct Image *image);
+void menuAddPartialImage(struct Menu *menu, struct PartialImage *image);
 
 void labelInit(struct Label *label, char *text, struct SDL_Color fg,
 			   struct SDL_Color bg, int x, int y, int w, int h);
@@ -126,6 +142,13 @@ void imageInit(struct Image *image, char *texturePath, int x, int y, int w,
 void imageDestroy(struct Image *image);
 void imageRender(struct Image *image);
 void imageTick(struct Image *image);
+
+void partialImageInit(struct PartialImage *image, char *texturePath, int x,
+					  int y, int w, int h, int imageX, int imageY, int imageW,
+					  int imageH, float rot);
+void partialImageDestroy(struct PartialImage *image);
+void partialImageRender(struct PartialImage *image);
+void partialImageTick(struct PartialImage *image);
 
 /* Util */
 struct SDL_Surface *loadTexture(const char *texPath);

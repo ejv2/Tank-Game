@@ -68,6 +68,10 @@ void menuRender(struct Menu *menu) {
 	for (int k = 0; k < menu->imageCount; k++) {
 		imageRender(menu->images[k]);
 	}
+
+	for (int l = 0; l < menu->partialImageCount; l++) {
+		partialImageRender(menu->partialImages[l]);
+	}
 }
 
 void menuAddLabel(struct Menu *menu, struct Label *label) {
@@ -98,6 +102,16 @@ void menuAddImage(struct Menu *menu, struct Image *image) {
 	}
 
 	menu->images[menu->imageCount - 1] = image;
+}
+
+void menuAddPartialImage(struct Menu *menu, struct PartialImage *image) {
+	menu->partialImageCount++;
+	if (menu->imageCount > UI_MAX_HUD_ELEMS) {
+		puts("E: Maximum UI elements exceeded; could not register p_image");
+		exit(1);
+	}
+
+	menu->partialImages[menu->partialImageCount - 1] = image;
 }
 
 void labelInit(struct Label *label, char *text, struct SDL_Color fg,
@@ -252,6 +266,45 @@ void imageRender(struct Image *image) {
 }
 
 void imageTick(struct Image *image) {
+	if (image->onTick)
+		image->onTick(image);
+}
+
+void partialImageInit(struct PartialImage *image, char *texturePath, int x,
+					  int y, int w, int h, int imageX, int imageY, int imageW,
+					  int imageH, float rot) {
+	SDL_Surface *texSurf = loadTexture(texturePath);
+	image->imageTexture = SDL_CreateTextureFromSurface(renderer, texSurf);
+	SDL_FreeSurface(texSurf);
+
+	image->location.x = x;
+	image->location.y = y;
+	image->location.w = w;
+	image->location.h = h;
+	image->rotation = rot;
+
+	image->imagePortion.x = imageX;
+	image->imagePortion.y = imageY;
+	image->imagePortion.w = imageW;
+	image->imagePortion.h = imageH;
+
+	image->onFrame = NULL;
+	image->onTick = NULL;
+}
+
+void partialImageDestroy(struct PartialImage *image) {
+	SDL_DestroyTexture(image->imageTexture);
+}
+
+void partialImageRender(struct PartialImage *image) {
+	if (image->onFrame)
+		image->onFrame(image);
+
+	SDL_RenderCopyEx(renderer, image->imageTexture, &image->imagePortion,
+					 &image->location, image->rotation, NULL, SDL_FLIP_NONE);
+}
+
+void partialImageTick(struct PartialImage *image) {
 	if (image->onTick)
 		image->onTick(image);
 }
