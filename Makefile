@@ -1,10 +1,10 @@
-sources=main.c level.c player.c util.c inputs.c menu.c
-objects=${sources:.c=.o} 
-subObjects=ui/ui.o
-headers=tank.h
+SRC = main.c level.c player.c util.c inputs.c menu.c
+OBJ = ${SRC:.c=.o}
+SOBJ = ui/ui.o
+HDR = tank.h
 
-exec=tank-game
-sdlflags=`sdl2-config --cflags --libs`
+EXE = tank-game
+SDLFLAGS = `sdl2-config --cflags --libs`
 
 export LDFLAGS += -lSDL2_image -lSDL2_ttf -lm
 export CFLAGS += -std=c99 -Wall -Wpedantic
@@ -18,23 +18,23 @@ else
 endif
 
 
-${exec}: ${objects} ${subObjects}
-	${CC} -o $@ ${objects} ${subObjects} ${sdlflags} ${LDFLAGS}
+${EXE}: ${OBJ} ${SOBJ}
+	${CC} -o $@ ${OBJ} ${SOBJ} ${SDLFLAGS} ${LDFLAGS}
 
 .c.o:
 	${CC} -c ${CFLAGS} $<
 
-${objects}: ${headers}
-${subObjects}: FORCE
+${OBJ}: ${HDR}
+${SOBJ}: FORCE
 	cd ui && ${MAKE}
 
 clean:
 	rm *.o
 	rm ui/*.o
-	rm ${exec}
+	rm ${EXE}
 	-rm *.tar
 
-dist: ${exec}
+dist: ${EXE}
 	tar -cf "tank-game-${VERSION}.tar" tank-game COPYING README.md res/ levels/
 
 FORCE:

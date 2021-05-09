@@ -1,13 +1,13 @@
-sources=mm.c test.c
-objects=${sources:.c=.o}
-headers=ui.h
+SRC = mm.c test.c
+OBJ = ${SRC:.c=.o}
+HDR = ui.h
 
-mainObj=ui.o
+MOBJ = ui.o
 
-${mainObj}: ${objects}
-	${LD} -r ${objects} -o ${mainObj}
+${MOBJ}: ${OBJ}
+	${LD} -r ${OBJ} -o ${MOBJ}
 
 .c.o:
 	${CC} -c ${CFLAGS} $<
 
-${objects}: ${headers}
+${OBJ}: ${HDR}
