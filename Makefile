@@ -30,7 +30,7 @@ ${subObjects}: FORCE
 
 clean:
 	rm *.o
-	cd ui && rm *.o
+	rm ui/*.o
 	rm ${exec}
 	-rm *.tar
 
