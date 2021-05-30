@@ -112,15 +112,15 @@ static bool levelFileParse(FILE *fp, struct Level *level) {
 		switch (cmd) {
 		case 's': /* Start coordinate */
 		{
-			level->startPoint[0] = atoi(strtok(data, ","));
-			level->startPoint[1] = atoi(strtok(NULL, ","));
+			level->startPoint[0] = strtoimax(strtok(data, ","), NULL, 10);
+			level->startPoint[1] = strtoimax(strtok(NULL, ","), NULL, 10);
 			break;
 		}
 		case 'w': /* Wall declaration */
 		{
-			int x = atoi(strtok(data, ","));
-			int y = atoi(strtok(NULL, ","));
-			int orientation = atoi(strtok(NULL, ","));
+			int x = strtoimax(strtok(data, ","), NULL, 10);
+			int y = strtoimax(strtok(NULL, ","), NULL, 10);
+			int orientation = strtoimax(strtok(NULL, ","), NULL, 10);
 
 			if (addEntity(level, wall, 100, false, x, y, (uint8_t)orientation) <
 				0) {
