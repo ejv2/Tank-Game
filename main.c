@@ -110,9 +110,19 @@ void quitSDL() {
 	TTF_Quit();
 
 	SDL_Quit();
+
+	if (currentLevel) {
+		levelDestroy(&level);
+	}
+
+	if (currentMenu) {
+		menuDestroy(currentMenu);
+	}
 }
 
 void startGame() {
+	menuDestroy(currentMenu);
+
 	state = game;
 	currentMenu = NULL;
 
