@@ -21,8 +21,7 @@ struct SDL_Surface *loadTexture(const char *texPath) {
 	SDL_Surface *image = IMG_Load(texPath);
 
 	if (!image) {
-		printf("E: One or more textures are missing. Please check your game "
-			   "installation\n");
+		printf("E: Missing texture detected: \"%s\"", texPath);
 		exit(-1);
 	}
 
