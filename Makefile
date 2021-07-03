@@ -32,9 +32,14 @@ clean:
 	rm *.o
 	rm ui/*.o
 	rm ${EXE}
-	-rm *.tar
+
+distclean:
+	rm *.gz
 
 dist: ${EXE}
 	tar -cf "tank-game-${VERSION}.tar" tank-game COPYING README.md res/ levels/
+	gzip tank-game-${VERSION}.tar
 
 FORCE:
+
+.PHONY = clean distclean dist FORCE
