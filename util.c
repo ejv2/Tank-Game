@@ -21,7 +21,7 @@ struct SDL_Surface *loadTexture(const char *texPath) {
 	SDL_Surface *image = IMG_Load(texPath);
 
 	if (!image) {
-		printf("E: Missing texture detected: \"%s\"", texPath);
+		printf("E: Missing texture detected: \"%s\"\n", texPath);
 		exit(-1);
 	}
 
