@@ -206,15 +206,11 @@ static bool levelFileParse(FILE *fp, struct Level *level) {
 			break;
 		}
 		case '#': /* Comment */
-		{
 			break;
-		}
-		case '\n': {
+		case '\n':
 			break;
-		}
-		default: {
+		default:
 			return false;
-		}
 		}
 	}
 
