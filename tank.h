@@ -174,6 +174,7 @@ void tankTick(struct Player *player, long milisTime);
 
 /* Level manager */
 enum EntityType { wall = 0, enemy = 1, goal = 2 };
+enum NodeType { move = 0, turn = 1 };
 
 struct Entity {
 	enum EntityType type;
@@ -190,6 +191,13 @@ struct Entity {
 	struct SDL_Texture *texture;
 };
 
+struct TankNode {
+	int x, y;
+	double orientation;
+
+	enum NodeType type;
+};
+
 struct Level {
 	int levelIndex;
 	char *levelFile;
@@ -198,6 +206,10 @@ struct Level {
 
 	uint32_t entityCount;
 	struct Entity *ents[LVL_MAX_ENTITY_COUNT];
+
+	int maxNodes;
+	int nodesUsed;
+	struct TankNode *nodes;
 };
 
 void levelInit(struct Level *level, struct Player *player, uint32_t levelID);
@@ -207,7 +219,7 @@ int addEntity(struct Level *level, enum EntityType type, uint8_t initialHealth,
 void removeEntity();
 
 void levelRender(struct Level *level);
-void levelTick(long milisTime);
+void levelTick(struct Level *level, long milisTime);
 
 /* Input handler */
 void updateKeys(char key, bool down);

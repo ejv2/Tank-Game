@@ -2,6 +2,7 @@
 # This is a Tank Game level file
 # Editing may make game unplayable
 s 100,328
+m 1
 
 w 500,200,0
 w 564,200,0

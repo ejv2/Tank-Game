@@ -111,12 +111,16 @@ void quitSDL() {
 
 	SDL_Quit();
 
-	if (currentLevel) {
+	switch (state) {
+	case game:
 		levelDestroy(&level);
-	}
-
-	if (currentMenu) {
+		break;
+	case fsMenu: /* FALLTHROUGH */
+	case olMenu:
 		menuDestroy(currentMenu);
+		break;
+	default: /* This is fine */
+		break;
 	}
 }
 
@@ -179,11 +183,11 @@ void tick() {
 		break;
 	case olMenu:
 		menuTick(currentMenu);
-		levelTick(now);
+		levelTick(&level, now);
 		tankTick(&player, now);
 		break;
 	case game:
-		levelTick(now);
+		levelTick(&level, now);
 		tankTick(&player, now);
 	case failure:
 		break;
