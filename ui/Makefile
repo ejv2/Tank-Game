@@ -1,4 +1,4 @@
-SRC = mm.c test.c
+SRC = mm.c loading.c test.c
 OBJ = ${SRC:.c=.o}
 HDR = ui.h
 

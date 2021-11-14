@@ -127,11 +127,14 @@ void quitSDL() {
 void startGame() {
 	menuDestroy(currentMenu);
 
-	state = game;
-	currentMenu = NULL;
+	createLoaderMenu();
+	render();
 
 	tankInit(&player);
 	levelInit(&level, &player, currentLevel);
+
+	state = game;
+	currentMenu = NULL;
 }
 
 void init() {

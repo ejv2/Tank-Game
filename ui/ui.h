@@ -14,6 +14,9 @@
 /* Main menu */
 void createMainMenu();
 
+/* Loader menu */
+void createLoaderMenu();
+
 /* Test menu */
 void createTestMenu();
 
