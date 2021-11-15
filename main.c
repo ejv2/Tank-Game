@@ -18,6 +18,7 @@
 
 #include "tank.h"
 #include "ui/ui.h"
+#include "hud/hud.h"
 
 static const uint32_t sdl_systems =
 	SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS | SDL_INIT_TIMER;
@@ -162,6 +163,7 @@ void render() {
 	case game:
 		tankRender(&player);
 		levelRender(&level);
+		HUDRender();
 		break;
 	case failure:
 		break;

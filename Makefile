@@ -1,6 +1,8 @@
 SRC = main.c level.c player.c util.c inputs.c menu.c
 OBJ = ${SRC:.c=.o}
-SOBJ = ui/ui.o
+UOBJ = ui/ui.o
+HOBJ = hud/mhud.o
+SOBJ = ${UOBJ} ${HOBJ}
 HDR = tank.h
 
 EXE = tank-game
@@ -17,20 +19,22 @@ else
 	CFLAGS += -O2
 endif
 
-
-${EXE}: ${OBJ} ${SOBJ}
+${EXE}: ${OBJ} ${UOBJ} ${HOBJ}
 	${CC} -o $@ ${OBJ} ${SOBJ} ${SDLFLAGS} ${LDFLAGS}
 
 .c.o:
 	${CC} -c ${CFLAGS} $<
 
 ${OBJ}: ${HDR}
-${SOBJ}: FORCE
-	cd ui && ${MAKE}
+${UOBJ}: FORCE
+	${MAKE} -C ui
+${HOBJ}: FORCE
+	${MAKE} -C hud
 
 clean:
 	rm *.o
 	rm ui/*.o
+	rm hud/*.o
 	rm ${EXE}
 
 distclean:
