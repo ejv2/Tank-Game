@@ -161,9 +161,9 @@ void render() {
 		levelRender(&level);
 		break;
 	case game:
-		tankRender(&player);
 		levelRender(&level);
-		HUDRender();
+		tankRender(&player);
+		HUDRender(&level);
 		break;
 	case failure:
 		break;

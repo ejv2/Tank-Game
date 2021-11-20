@@ -6,7 +6,10 @@
  * Main HUD (Heads Up Display) code
  */
 
-void HUDRender()
+#include "../tank.h"
+#include "hud.h"
+
+void HUDRender(struct Level *lvl)
 {
 	return;
 }

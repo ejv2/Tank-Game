@@ -115,16 +115,11 @@ void removeEntity(struct Level *level, unsigned int id) {
 void levelRender(struct Level *level) {
 	int x, y;
 	struct SDL_Rect mouserect;
-
 	SDL_GetMouseState(&x, &y);
 	mouserect.w = 32;
 	mouserect.h = 32;
 	mouserect.x = x; /* - (mouserect.w / 2); */
 	mouserect.y = y; /* - (mouserect.h / 2); */
-
-
-	SDL_RenderCopyEx(renderer, placeholderNode, NULL, &mouserect, 0, NULL, SDL_FLIP_NONE);
-
 
 	if (isMousePressed(1)) {
 		if (!nodeDebounce) {
@@ -166,6 +161,9 @@ void levelRender(struct Level *level) {
 		SDL_RenderCopyEx(renderer, node_loadedTextures[node.type], NULL, &place,
 						 node.orientation, NULL, SDL_FLIP_NONE);
 	}
+
+	SDL_RenderCopyEx(renderer, placeholderNode, NULL, &mouserect, 0, NULL,
+					 SDL_FLIP_NONE);
 }
 
 void levelTick(struct Level *level, long milisTime) {
